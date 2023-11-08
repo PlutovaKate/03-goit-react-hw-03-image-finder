@@ -1,14 +1,14 @@
-// import { Component } from 'react';
+import { Component } from 'react';
 
-// class ImageGalleryItem extends Component {
-//   render() {
-//     const { webformatURL, largeImageURL, tags } = this.props;
-//     return (
-//       <li>
-//         <img src={webformatURL} alt={tags} />
-//       </li>
-//     );
-//   }
-// }
+class ImageGalleryItem extends Component {
+  render() {
+    const { smallImage, largeImage, tags } = this.props;
+    return (
+      <li>
+        <img src={smallImage} alt={tags} />
+      </li>
+    );
+  }
+}
 
-// export default ImageGalleryItem;
+export default ImageGalleryItem;

@@ -3,9 +3,33 @@ import Layout from './Layout';
 import ModalWindow from './Modal/Modal';
 import SearchBar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
-import { fetchImages } from './api';
+import * as ImageService from './api';
 
 export class App extends Component {
+  state = {
+    query: '',
+    hits: [],
+  };
+
+  onSubmit = query => {
+    if (!query) return;
+    this.setState({
+      query,
+    });
+  };
+
+  async componentDidUpdate(prevProps, prevState) {
+    if (prevState.query !== this.state.query) {
+      const {
+        data: { hits, totalHits },
+      } = await ImageService.fetchImages({
+        query: this.state.query,
+        page: this.state.page,
+      });
+      this.setState(prevState => ({ hits: [prevState.hits, ...hits] }));
+    }
+  }
+
   // state = {
   //   searchValue: '',
   //   page: 1,
@@ -49,10 +73,9 @@ export class App extends Component {
   render() {
     return (
       <Layout>
-        <SearchBar />
-        <ImageGallery />
-        {/* <SearchBar onSubmit={this.handleSubmit} />
-        <ImageGallery newImages={this.state.images} /> */}
+        <SearchBar onSubmit={this.onSubmit} />
+        <ImageGallery images={this.state.hits} />
+
         <ModalWindow />
       </Layout>
     );
