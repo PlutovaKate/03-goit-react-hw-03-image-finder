@@ -1,4 +1,10 @@
 import { Component } from 'react';
+import { SearchbarHeader } from './Searchbar.styled';
+import { SearchForm } from './Searchbar.styled';
+import { SearchFormButton } from './Searchbar.styled';
+import { SearchFormButtonLabel } from './Searchbar.styled';
+import { SearchFormInput } from './Searchbar.styled';
+import { FcSearch } from 'react-icons/fc';
 
 class SearchBar extends Component {
   handleSubmit = e => {
@@ -8,13 +14,14 @@ class SearchBar extends Component {
   };
   render() {
     return (
-      <header class="searchbar">
-        <form class="form" onSubmit={this.handleSubmit}>
-          <button type="submit" class="button">
-            <span class="button-label">Search</span>
-          </button>
+      <SearchbarHeader>
+        <SearchForm onSubmit={this.handleSubmit}>
+          <SearchFormButton type="submit">
+            <FcSearch />
+            <SearchFormButtonLabel>Search</SearchFormButtonLabel>
+          </SearchFormButton>
 
-          <input
+          <SearchFormInput
             class="input"
             type="text"
             autocomplete="off"
@@ -22,8 +29,8 @@ class SearchBar extends Component {
             placeholder="Search images and photos"
             name="searchValue"
           />
-        </form>
-      </header>
+        </SearchForm>
+      </SearchbarHeader>
     );
   }
 }

@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 
-const Layout = styled.div`
+export const Layout = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 16px;
   padding-bottom: 24px;
 `;
 
-export default Layout;
+export const Notification = styled.h2`
+  text-align: center;
+`;

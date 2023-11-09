@@ -1,9 +1,10 @@
 import { Component } from 'react';
-import Layout from './Layout';
+import { Layout } from './Layout';
 import ModalWindow from './Modal/Modal';
 import SearchBar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import * as ImageService from './api';
+import { Notification } from './Layout';
 
 export class App extends Component {
   state = {
@@ -74,6 +75,9 @@ export class App extends Component {
     return (
       <Layout>
         <SearchBar onSubmit={this.onSubmit} />
+        {this.state.hits.length === 0 && (
+          <Notification>Sorry. There are no images ... 😭</Notification>
+        )}
         <ImageGallery images={this.state.hits} />
 
         <ModalWindow />
