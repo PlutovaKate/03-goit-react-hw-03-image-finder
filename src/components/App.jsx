@@ -44,8 +44,9 @@ export class App extends Component {
           this.setState(prevState => ({
             hits: [...hits],
           }));
-
-          hits.length > 0 && toast.success('We found images for you');
+          if (hits.length > 0) {
+            toast.success('We found images for you');
+          }
         }
       } catch (error) {
         this.setState({ error: true });
