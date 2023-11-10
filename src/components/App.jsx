@@ -35,7 +35,7 @@ export class App extends Component {
         this.setState({ isLoading: true, error: false });
         {
           const {
-            data: { hits, totalHits },
+            data: { hits },
           } = await ImageService.fetchImages({
             query: this.state.query,
             page: this.state.page,
@@ -68,7 +68,7 @@ export class App extends Component {
         )}
         {isLoading && <Loader />}
         {error && (
-          <Notification>Whoops! Error! Please reload this page!!!</Notification>
+          <Notification>Whoops! Error! Please reload this page!</Notification>
         )}
 
         <ImageGallery images={hits} />
