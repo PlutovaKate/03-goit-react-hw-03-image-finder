@@ -40,11 +40,13 @@ export class App extends Component {
             query: this.state.query,
             page: this.state.page,
           });
-          toast.success('We found images for you');
 
           this.setState(prevState => ({
             hits: [...hits],
           }));
+          {
+            hits.length > 0 && toast.success('We found images for you');
+          }
         }
       } catch (error) {
         this.setState({ error: true });
@@ -72,10 +74,9 @@ export class App extends Component {
         {error && (
           <Notification>Whoops! Error! Please reload this page!</Notification>
         )}
-
         {hits.length > 0 && <ImageGallery images={hits} />}
-        {hits.length !== totalHits && <Button changePage={this.changePage} />}
 
+        {hits.length !== totalHits && <Button changePage={this.changePage} />}
         <ModalWindow />
         <Toaster />
       </Layout>
