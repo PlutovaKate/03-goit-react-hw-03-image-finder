@@ -68,7 +68,7 @@ export class App extends Component {
         )}
         {isLoading && <Loader />}
         {error && (
-          <Notification>Whoops! Error! Please reload this page!</Notification>
+          <Notification>Whoops! Error! Please reload this page!!!</Notification>
         )}
 
         <ImageGallery images={hits} />
