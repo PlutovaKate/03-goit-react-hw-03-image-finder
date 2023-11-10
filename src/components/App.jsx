@@ -3,13 +3,20 @@ import { Layout } from './Layout';
 import ModalWindow from './Modal/Modal';
 import SearchBar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
+import Loader from './Loader/Loader';
 import * as ImageService from './api';
 import { Notification } from './Layout';
+import toast, { Toaster } from 'react-hot-toast';
+import Button from './Button/Button';
 
 export class App extends Component {
   state = {
     query: '',
     hits: [],
+    error: false,
+    isLoading: false,
+    totalHits: 0,
+    page: 1,
   };
 
   onSubmit = query => {
@@ -21,66 +28,49 @@ export class App extends Component {
 
   async componentDidUpdate(prevProps, prevState) {
     if (prevState.query !== this.state.query) {
-      const {
-        data: { hits, totalHits },
-      } = await ImageService.fetchImages({
-        query: this.state.query,
-        page: this.state.page,
-      });
-      this.setState(prevState => ({ hits: [prevState.hits, ...hits] }));
+      try {
+        this.setState({ isLoading: true, error: false });
+        {
+          const {
+            data: { hits, totalHits },
+          } = await ImageService.fetchImages({
+            query: this.state.query,
+            page: this.state.page,
+          });
+          toast.success('We found images for you');
+          this.setState(prevState => ({ hits: [prevState.hits, ...hits] }));
+        }
+      } catch (error) {
+        this.setState({ error: true });
+      } finally {
+        this.setState({ isLoading: false });
+      }
     }
   }
 
-  // state = {
-  //   searchValue: '',
-  //   page: 1,
-  //   images: [],
-  //   totalHits: '',
-  //   error: false,
-  //   isLoading: false,
-  // };
-
-  // handleSubmit = searchValue => {
-  //   this.setState({
-  //     searchValue,
-  //     page: 1,
-  //     images: [],
-  //     totalHits: '',
-  //   });
-  // };
-
-  // async componentDidUpdate(prevProps, prevState) {
-  //   if (
-  //     prevState.page !== this.state.page ||
-  //     prevState.searchValue !== this.state.searchValue
-  //   ) {
-  //     try {
-  //       const newImages = await fetchImages(
-  //         this.state.page,
-  //         this.state.searchValue
-  //       );
-  //       this.setState({
-  //         images: [...this.state.images, ...newImages.hits],
-  //         totalHits: newImages.totalHits,
-  //       });
-  //     } catch (error) {
-  //       this.setState({ error: true });
-  //     } finally {
-  //       this.setState({ isLoading: false });
-  //     }
-  //   }
-  // }
+  changePage = () => {
+    this.setState(prevState => {
+      return { page: prevState.page + 1 };
+    });
+  };
 
   render() {
+    const { error, hits, isLoading, totalHits } = this.state;
     return (
       <Layout>
         <SearchBar onSubmit={this.onSubmit} />
-        {this.state.hits.length === 0 && (
+        {hits.length === 0 && !error && (
           <Notification>Sorry. There are no images ... 😭</Notification>
         )}
-        <ImageGallery images={this.state.hits} />
+        {isLoading && <Loader />}
+        {error && (
+          <Notification>Whoops! Error! Please reload this page!</Notification>
+        )}
+        <ImageGallery images={hits} />
+        {hits.length !== totalHits && <Button changePage={this.changePage} />}
 
         <ModalWindow />
+        <Toaster />
       </Layout>
     );
   }
