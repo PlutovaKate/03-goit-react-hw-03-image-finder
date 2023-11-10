@@ -27,7 +27,10 @@ export class App extends Component {
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    if (prevState.query !== this.state.query) {
+    if (
+      prevState.query !== this.state.query ||
+      prevState.page !== this.state.page
+    ) {
       try {
         this.setState({ isLoading: true, error: false });
         {
@@ -38,6 +41,7 @@ export class App extends Component {
             page: this.state.page,
           });
           toast.success('We found images for you');
+
           this.setState(prevState => ({ hits: [prevState.hits, ...hits] }));
         }
       } catch (error) {
@@ -60,12 +64,13 @@ export class App extends Component {
       <Layout>
         <SearchBar onSubmit={this.onSubmit} />
         {hits.length === 0 && !error && (
-          <Notification>Sorry. There are no images ... 😭</Notification>
+          <Notification>Try to find some images</Notification>
         )}
         {isLoading && <Loader />}
         {error && (
           <Notification>Whoops! Error! Please reload this page!</Notification>
         )}
+
         <ImageGallery images={hits} />
         {hits.length !== totalHits && <Button changePage={this.changePage} />}
 
