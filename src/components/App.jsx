@@ -43,7 +43,7 @@ export class App extends Component {
           toast.success('We found images for you');
 
           this.setState(prevState => ({
-            hits: [...prevState.hits, ...hits],
+            hits: [...hits],
           }));
         }
       } catch (error) {
