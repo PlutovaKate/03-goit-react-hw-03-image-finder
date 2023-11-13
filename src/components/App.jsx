@@ -42,7 +42,7 @@ export class App extends Component {
           });
 
           this.setState(prevState => ({
-            hits: [...hits],
+            hits: [...prevState.hits, ...hits],
           }));
           if (hits.length > 0) {
             toast.success('We found images for you');
