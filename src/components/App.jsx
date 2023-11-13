@@ -22,6 +22,8 @@ export class App extends Component {
   onSubmit = query => {
     if (!query) return;
     this.setState({
+      hits: [],
+      page: 1,
       query,
     });
   };
